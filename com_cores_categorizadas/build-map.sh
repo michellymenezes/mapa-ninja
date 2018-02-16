@@ -23,3 +23,15 @@ dsv2json --input-encoding latin1 -r ';' -n < Domicilio02_PB.csv > pb-censo.ndjso
 ndjson-join 'd.Cod_setor' pb-ortho-sector.ndjson pb-censo.ndjson > pb-ndjson-join.ndjson
 
 ndjson-map "$EXP_PROPRIEDADE"  < pb-ndjson-join.ndjson  | geo2topo -n  tracts=-  | toposimplify -p 1 -f  | topoquantize 1e5   | topo2geo tracts=- | ndjson-map -r d3 -r d3=d3-scale-chromatic  "$EXP_ESCALA"  | ndjson-split 'd.features' | geo2svg -n --stroke none -w 1000 -h 600  > pb-chroropleth.svg
+
+
+EXP_PROPRIEDADE='d[0].properties = {mulheresP: (Number(d[1].V083)*100/Number(d[1].V001))}, d[0]'
+
+EXP_ESCALA='z = d3.scaleThreshold().domain([0, 25, 50, 75, 100]).range(d3.schemePuBuGn[4]), d.features.forEach(f => f.properties.fill = z(f.properties.mulheresP)), d'
+
+ndjson-map 'd.Cod_setor = d.properties.CD_GEOCODI, d' < pb-ortho.ndjson > pb-ortho-sector.ndjson
+
+dsv2json --input-encoding latin1 -r ';' -n < Domicilio02_PB.csv > pb-censo.ndjson
+ndjson-join 'd.Cod_setor' pb-ortho-sector.ndjson pb-censo.ndjson > pb-ndjson-join.ndjson
+
+ndjson-map "$EXP_PROPRIEDADE"  < pb-ndjson-join.ndjson  | geo2topo -n  tracts=-  | toposimplify -p 1 -f  | topoquantize 1e5   | topo2geo tracts=- | ndjson-map -r d3 -r d3=d3-scale-chromatic  "$EXP_ESCALA"  | ndjson-split 'd.features' | geo2svg -n --stroke none -w 1000 -h 600  > pb-chroropleth2.svg
