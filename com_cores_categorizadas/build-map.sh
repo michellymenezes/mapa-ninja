@@ -15,7 +15,7 @@ ndjson-split 'd.features' < pb-ortho.json > pb-ortho.ndjson
 
 EXP_PROPRIEDADE='d[0].properties = {mulheres: Number(d[1].V083)}, d[0]'
 
-EXP_ESCALA='z = d3.scaleThreshold().domain([0, 250, 500, 750, 1100]).range(d3.schemePuBuGn[4]), d.features.forEach(f => f.properties.fill = z(f.properties.mulheres)), d'
+EXP_ESCALA='z = d3.scaleThreshold().domain([0, 250, 500, 750, 1100]).range(d3.schemeSpectral[5]), d.features.forEach(f => f.properties.fill = z(f.properties.mulheres)), d'
 
 ndjson-map 'd.Cod_setor = d.properties.CD_GEOCODI, d' < pb-ortho.ndjson > pb-ortho-sector.ndjson
 
@@ -27,7 +27,7 @@ ndjson-map "$EXP_PROPRIEDADE"  < pb-ndjson-join.ndjson  | geo2topo -n  tracts=- 
 
 EXP_PROPRIEDADE='d[0].properties = {mulheresP: (Number(d[1].V083)*100/Number(d[1].V001))}, d[0]'
 
-EXP_ESCALA='z = d3.scaleThreshold().domain([0, 25, 50, 75, 100]).range(d3.schemePuBuGn[4]), d.features.forEach(f => f.properties.fill = z(f.properties.mulheresP)), d'
+EXP_ESCALA='z = d3.scaleThreshold().domain([0, 25, 50, 75, 100]).range(d3.schemeSpectral[5]), d.features.forEach(f => f.properties.fill = z(f.properties.mulheresP)), d'
 
 ndjson-map 'd.Cod_setor = d.properties.CD_GEOCODI, d' < pb-ortho.ndjson > pb-ortho-sector.ndjson
 
